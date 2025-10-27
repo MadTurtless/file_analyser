@@ -17,9 +17,11 @@ int main() {
 
         for (auto& f : files) {
             std::cout << "The file at '" << f.getPath()
-                      << "' is a(n) " << f.getType() << " file.\n";
+                      << "' is a(n) " << f.getType() << " file "
+                      << "with permissions '" << std::oct << f.getPerms() << "'.\n";
         }
 
+        std::cout << std::dec;
     } catch (const std::exception& e) {
         std::cerr << e.what() << "\n";
     }

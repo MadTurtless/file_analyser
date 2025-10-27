@@ -8,15 +8,17 @@
 class File {
     std::string path;
     std::string type;
-    std::vector<std::string> content;
+    int perms;
 
     void setType();
+    void setPerms();
     static std::string getTypeBySignature(const std::string& signature);
 
 public:
     explicit File(std::string path);
-    std::string getType() const;
-    std::string getPath() const;
+    [[nodiscard]] std::string getType() const;
+    [[nodiscard]] std::string getPath() const;
+    [[nodiscard]] int getPerms() const;
 
     // static signature map
     static const std::unordered_multimap<std::string, std::string> sigs;

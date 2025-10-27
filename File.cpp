@@ -1,12 +1,14 @@
 #include "File.h"
+
+#include <filesystem>
 #include <fstream>
 #include <sstream>
 #include <iterator>
 #include <iomanip>
+#include <iostream>
 #include <stdexcept>
 #include <utility>
 
-// define the static map
 const std::unordered_multimap<std::string, std::string> File::sigs {
         {"jpeg", "ffd8ffdb"},
         {"jpeg", "ffd8ffe1"},
@@ -27,11 +29,13 @@ File::File(std::string path) : path(std::move(path)) {
     }
     f.close();
     setType();
+    setPerms();
 }
 
 // Getters
 std::string File::getType() const { return type; }
 std::string File::getPath() const { return path; }
+int File::getPerms() const { return perms; }
 
 // Private methods
 void File::setType() {
@@ -47,6 +51,12 @@ void File::setType() {
     }
 
     type = getTypeBySignature(ss.str());
+}
+
+void File::setPerms() {
+    const std::filesystem::path f(this->path);
+    const auto& p = std::filesystem::status(f).permissions();
+    this->perms = static_cast<int>(p); //This is an octal value being stored as decimal, use std::oct when printing!
 }
 
 std::string File::getTypeBySignature(const std::string& signature) {
